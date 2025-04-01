@@ -99,11 +99,9 @@ An object containing the following properties:
 
 - **`issueStyles`**  
   - **Type:** `object`  
-  - **Description:** Contains icons and HEX colors used to flag issues. Useful for creating a legend in applications validating the schema. Includes the following properties:
+  - **Description:** Contains icons used to flag issues. Useful for creating a legend in applications validating the schema. Includes the following properties:
     - **`iconPropertyError`**: Icon for property errors.
-    - **`colorPropertyError`**: HEX color for property errors.
     - **`iconPropertyMissing`**: Icon for missing properties.
-    - **`colorPropertyMissing`**: HEX color for missing properties.
 
 #### Throws
 - **Error:** If any of the required parameters are missing or if the schema or schema definition cannot be found.
