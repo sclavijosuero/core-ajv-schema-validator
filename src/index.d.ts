@@ -26,5 +26,5 @@
 export declare function validateSchema(
     data: any,
     schema: any,
-    path?: PathObject
+    path?: object
 ): object;
