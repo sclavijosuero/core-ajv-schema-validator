@@ -85,6 +85,13 @@ Function that validates the given data against the provided schema.
       - **Type:** `integer`
       - **Description:** The response status code. Defaults to `200` if not provided.
 
+- **`issuesStyles`**  (optional)
+  - **Type:** `object`  
+  - **Description:**  An object with the icons used to flag the schema issues. If not provided, it will use the default icons defined in the plugin. Includes the following properties:
+    - **`iconPropertyError`**: The icon used to flag type errors in the data.
+    - **`iconPropertyMissing`**: The icon used to flag missing properties in the data.
+
+
 #### Returns
 
 An object containing the following properties:
@@ -97,11 +104,6 @@ An object containing the following properties:
   - **Type:** `object`  
   - **Description:** The original response data with all schema mismatches directly flagged.
 
-- **`issueStyles`**  
-  - **Type:** `object`  
-  - **Description:** Contains icons used to flag issues. Useful for creating a legend in applications validating the schema. Includes the following properties:
-    - **`iconPropertyError`**: Icon for property errors.
-    - **`iconPropertyMissing`**: Icon for missing properties.
 
 #### Throws
 - **Error:** If any of the required parameters are missing or if the schema or schema definition cannot be found.
@@ -117,11 +119,15 @@ Example providing a Plain JSON schema:
   //...
 ```
 
-Example providing an OpenAPI 3.0.1 or Swagger 2.0 schema documents and path to the schema definition:
+Example providing an OpenAPI 3.0.1 or Swagger 2.0 schema documents, a path to the schema definition, and issuesStyles:
 
 ```js
+  const issuesStyles = {
+      iconPropertyError: '🔸',
+      iconPropertyMissing: '🔴'
+  }
   const data = response.body
-  const { errors, dataMismatches } = validateSchema(data, schema, { endpoint: '/users/{id}', method: 'GET', status: 200 });
+  const { errors, dataMismatches } = validateSchema(data, schema, { endpoint: '/users/{id}', method: 'GET', status: 200 }, issuesStyles);
   expect(errors).to.have.length(0); // Assertion to ensure no validation errors
   console.log(dataMismatches)
 ```

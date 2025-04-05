@@ -16,9 +16,9 @@ addFormats(ajv)
 // MESSAGES & ICONS
 // ------------------------------------
 
-const issueStyles = {
-    iconPropertyError: '😱',
-    iconPropertyMissing: '😡'
+const issuesStylesDefault = {
+    iconPropertyError: '⚠️',
+    iconPropertyMissing: '❌'
 }
 
 const errorInvalidSchema = `You must provide a valid schema!`
@@ -32,19 +32,19 @@ const errorInvalidSchemaParameters = `You must provide valid schema parameters (
 /**
  * Function that validates the given data against the provided schema.
  * @public
- *
  * @param {any} data - The data to be validated.
  * @param {object} schema - The schema to validate against. Supported formats are plain JSON schema, Swagger, and OpenAPI documents. See https://ajv.js.org/json-schema.html for more information.
  * @param {object} [path] - The path object to the schema definition in a Swagger or OpenAPI document. Not required if the schema is a plain JSON schema.
  * @param {string} [path.endpoint] - The endpoint path. Required if the schema is a Swagger or OpenAPI document.
  * @param {string} [path.method] - The HTTP method. If not provided, it will use 'GET'.
  * @param {integer} [path.status] - The response status code. If not provided, it will use 200.
+ * @param {object} [issuesStyles] - An object with the icons and HEX colors used to flag the issues.
+ * @param {string} [issuesStyles.iconPropertyError] - The icon used to flag the property error.
+ * @param {string} [issuesStyles.iconPropertyMissing] - The icon used to flag the missing property.
  * 
  * @returns {object} - An object containing:
  *   - errors: An array of validation errors as provided by Ajv, or null if the data is valid against the schema.
  *   - dataMismatches: The original response data with all schema mismatches flagged directly.
- *   - issueStyles: An object with the icons used to flag the issues. This could be useful if wanted to create legend in the application validating the schema.
- *                  Includes the properties: iconPropertyError, and iconPropertyMissing.
  * @throws {Error} - If any of the required parameters are missing or if the schema or schema definition is not found.
  *
  * @example
@@ -72,17 +72,17 @@ const errorInvalidSchemaParameters = `You must provide valid schema parameters (
  *   }
  * }
  *
- *   // response... (is the response object from the API request)
+ *   const response = ... (is the response object from the API request)
  *   const data = response.body
  *   const path = { endpoint: '/users', method: 'GET', status: '200' };
+ *   const issuesStyles = { iconPropertyError: '⚠️', iconPropertyMissing: '❌' };
  * 
- *   const validationResult = validateSchema(data, schema, path);
- *   console.log(validationResult.errors); // Array of validation errors
+ *   const validationResult = validateSchema(data, schema, path, issuesStyles);
+ *   console.log(validationResult.errors); // Array of validation errors, or nut if not found
  *   console.log(validationResult.dataMismatches); // Data with mismatches flagged
- *   console.log(validationResult.issueStyles); // Icons used for mismatches
  * });
  */
-export const validateSchema = (data, schema, path) => {
+export const validateSchema = (data, schema, path, issuesStyles = {}) => {
 
     if (schema == null) {
         console.log(errorInvalidSchema)
@@ -101,10 +101,12 @@ export const validateSchema = (data, schema, path) => {
         }
     }
 
-    // Validate the response body against the schema
-    const { errors, dataMismatches } = _validateSchemaAJV(schema, data, issueStyles)
+    issuesStyles = { ...issuesStylesDefault, ...issuesStyles }
 
-    return { errors, dataMismatches, issueStyles }
+    // Validate the response body against the schema
+    const { errors, dataMismatches } = _validateSchemaAJV(schema, data, issuesStyles)
+
+    return { errors, dataMismatches, issuesStyles }
 }
 
 // ------------------------------------
@@ -227,6 +229,7 @@ const _getSchemaFromSpecificationDoc = (schema, { endpoint, method, status }) =>
  *
  * @param {object} schema - The JSON schema to validate against.
  * @param {object} data - The data to be validated.
+ * @param {object} issuesStyles - An object with the icons used to flag the issues. Contains: iconPropertyError, iconPropertyMissing.
  * 
  * @returns {object} - An object containing the validation result and any errors: { valid, errors }.
  * 
@@ -249,9 +252,9 @@ const _getSchemaFromSpecificationDoc = (schema, { endpoint, method, status }) =>
  * console.log(validationResult.valid) // true
  * console.log(validationResult.errors) // null
  */
-const _validateSchemaAJV = (schema, data, issueStyles) => {
+const _validateSchemaAJV = (schema, data, issuesStyles) => {
 
-    const { iconPropertyError, iconPropertyMissing } = issueStyles
+    const { iconPropertyError, iconPropertyMissing } = issuesStyles
     // Generate validating function from the schema
     const validate = ajv.compile(schema)
     // Validate the data using passed schema

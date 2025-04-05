@@ -14,17 +14,20 @@
  * @param {string} [path.endpoint] - The endpoint path. Required if the schema is a Swagger or OpenAPI document.
  * @param {string} [path.method] - The HTTP method. If not provided, it will use 'GET'.
  * @param {integer} [path.status] - The response status code. If not provided, it will use 200.
+ * @param {object} [issuesStyles] - An object with the icons and HEX colors used to flag the issues.
+ * @param {string} [issuesStyles.iconPropertyError] - The icon used to flag the property error.
+ * @param {string} [issuesStyles.iconPropertyMissing] - The icon used to flag the missing property.
  * 
  * @returns {object} - An object containing:
  *   - errors: An array of validation errors as provided by Ajv, or null if the data is valid against the schema.
  *   - dataMismatches: The original response data with all schema mismatches flagged directly.
- *   - issueStyles: An object with the icons used to flag the issues. This could be useful if wanted to create legend in the application validating the schema.
- *                  Includes the properties: iconPropertyError, and iconPropertyMissing.
+ *
  * @throws {Error} - If any of the required parameters are missing or if the schema or schema definition is not found.
  */
 
 export declare function validateSchema(
     data: any,
     schema: any,
-    path?: object
+    path?: object,
+    issuesStyles?: object
 ): object;
