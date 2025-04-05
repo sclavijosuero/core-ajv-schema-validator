@@ -127,7 +127,9 @@ Example providing an OpenAPI 3.0.1 or Swagger 2.0 schema documents, a path to th
       iconPropertyMissing: '🔴'
   }
   const data = response.body
+
   const { errors, dataMismatches } = validateSchema(data, schema, { endpoint: '/users/{id}', method: 'GET', status: 200 }, issuesStyles);
+  
   expect(errors).to.have.length(0); // Assertion to ensure no validation errors
   console.log(dataMismatches)
 ```
