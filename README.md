@@ -1,6 +1,6 @@
 # core-ajv-schema-validator
 
-Plugin for API testing to validate API responses against plain JSON schemas, Swagger documents, or OpenAPI documents using the Ajv JSON Schema validator. It can be used directly in any project and also serves as the core engine for schema validation in the cypress-ajv-schema-validator.
+Plugin for API testing to validate API responses against plain JSON schemas, Swagger documents, or OpenAPI documents using the Ajv JSON Schema validator. It can be used directly in any project, but also serves as the core engine for schema validation in the cypress-ajv-schema-validator and playwright-ajv-schema-validator.
 
 ![Overview](images/overview.png)
 
@@ -129,7 +129,7 @@ Example providing an OpenAPI 3.0.1 or Swagger 2.0 schema documents, a path to th
   const data = response.body
 
   const { errors, dataMismatches } = validateSchema(data, schema, { endpoint: '/users/{id}', method: 'GET', status: 200 }, issuesStyles);
-  
+
   expect(errors).to.have.length(0); // Assertion to ensure no validation errors
   console.log(dataMismatches)
 ```
