@@ -11,6 +11,8 @@ Plugin for API testing to validate API responses against plain JSON schemas, Swa
   
 - The schema is provided as a JSON object and supports: **plain JSON schema**, **OpenAPI 3 schema document** and **Swagger 2.0 schema document**.
 
+- Provides the full list of errors as delivered by the Ajv, and a user-friendly view of the mismatches between the validated data and the JSON schema, highlighting where each validation error occurred and the exact reason for the mismatch
+
 - Relies on the **Ajv JSON Schema Validator** as its powerful core engine for schema validation.
 
 
